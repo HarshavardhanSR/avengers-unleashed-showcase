@@ -39,6 +39,22 @@ export default function Characters() {
             <CharacterCard key={char.id} character={char} index={i} />
           ))}
         </div>
+
+        {/* Relationship graph link */}
+        <motion.div
+          className="max-w-6xl mx-auto mt-12 text-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.8 }}
+        >
+          <button
+            onClick={() => navigate("/relationships")}
+            className="px-8 py-3 font-display font-bold text-sm tracking-[0.3em] uppercase border-2 border-secondary text-secondary hover:bg-secondary/10 transition-all"
+            style={{ boxShadow: "0 0 20px hsl(220 80% 55% / 0.2)" }}
+          >
+            VIEW NETWORK MAP
+          </button>
+        </motion.div>
       </div>
     </div>
   );
