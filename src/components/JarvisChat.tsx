@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle, X, Send, Bot } from "lucide-react";
+import { X, Send, Bot } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 
 type Msg = { role: "user" | "assistant"; content: string };
@@ -28,7 +28,7 @@ export default function JarvisChat() {
     setInput("");
     setLoading(true);
 
-    let assistantSoFar = "";
+    let accumulated = "";
 
     try {
       const resp = await fetch(CHAT_URL, {
@@ -69,8 +69,8 @@ export default function JarvisChat() {
             const parsed = JSON.parse(jsonStr);
             const content = parsed.choices?.[0]?.delta?.content as string | undefined;
             if (content) {
-              assistantSoFar += content;
-              const finalContent = assistantSoFar;
+              accumulated += content;
+              const finalContent = accumulated;
               setMessages((prev) => {
                 const last = prev[prev.length - 1];
                 if (last?.role === "assistant" && prev.length > newMessages.length) {
@@ -93,7 +93,6 @@ export default function JarvisChat() {
 
   return (
     <>
-      {/* Toggle button */}
       <motion.button
         onClick={() => setOpen(!open)}
         className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-card border border-border flex items-center justify-center hover:border-secondary transition-colors"
@@ -112,14 +111,12 @@ export default function JarvisChat() {
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             className="fixed bottom-24 right-6 z-50 w-[360px] max-w-[calc(100vw-3rem)] h-[480px] flex flex-col rounded-sm overflow-hidden hud-panel"
           >
-            {/* Header */}
             <div className="px-4 py-3 border-b border-border flex items-center gap-3 bg-card/90">
               <div className="w-2 h-2 rounded-full bg-secondary animate-pulse" />
               <span className="font-display text-xs tracking-widest text-secondary">J.A.R.V.I.S.</span>
               <span className="text-mono text-[10px] text-muted-foreground ml-auto">ONLINE</span>
             </div>
 
-            {/* Messages */}
             <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-3">
               {messages.map((msg, i) => (
                 <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
@@ -140,7 +137,7 @@ export default function JarvisChat() {
                   </div>
                 </div>
               ))}
-              {loading && !assistantSoFar && (
+              {loading && messages[messages.length - 1]?.role !== "assistant" && (
                 <div className="flex justify-start">
                   <div className="bg-secondary/10 border border-secondary/20 px-3 py-2 rounded-sm">
                     <div className="flex gap-1">
@@ -158,7 +155,6 @@ export default function JarvisChat() {
               )}
             </div>
 
-            {/* Input */}
             <div className="p-3 border-t border-border bg-card/90">
               <div className="flex gap-2">
                 <input
@@ -183,5 +179,3 @@ export default function JarvisChat() {
     </>
   );
 }
-
-let assistantSoFar = "";

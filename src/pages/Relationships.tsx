@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import ParticleField from "@/components/ParticleField";
@@ -16,13 +16,13 @@ interface Node {
 interface Edge {
   from: string;
   to: string;
-  type: "friend" | "enemy" | "family";
+  type: "friend" | "enemy";
 }
 
 export default function Relationships() {
   const navigate = useNavigate();
   const [selected, setSelected] = useState<string | null>(null);
-  const [filter, setFilter] = useState<"all" | "friend" | "enemy" | "family">("all");
+  const [filter, setFilter] = useState<"all" | "friend" | "enemy">("all");
 
   const nodes: Node[] = useMemo(() => {
     const cx = 400, cy = 300, r = 200;
@@ -95,7 +95,6 @@ export default function Relationships() {
     switch (type) {
       case "friend": return "hsl(220, 80%, 55%)";
       case "enemy": return "hsl(0, 85%, 55%)";
-      case "family": return "hsl(45, 90%, 55%)";
       default: return "hsl(220, 10%, 30%)";
     }
   };
@@ -124,7 +123,6 @@ export default function Relationships() {
           </div>
         </motion.div>
 
-        {/* Filter buttons */}
         <motion.div
           className="flex gap-3 mb-6 flex-wrap"
           initial={{ opacity: 0 }}
@@ -146,7 +144,6 @@ export default function Relationships() {
           ))}
         </motion.div>
 
-        {/* Graph */}
         <motion.div
           className="hud-panel p-4 overflow-hidden"
           initial={{ opacity: 0, y: 20 }}
@@ -154,7 +151,6 @@ export default function Relationships() {
           transition={{ delay: 0.4 }}
         >
           <svg viewBox="0 0 800 600" className="w-full h-auto max-h-[60vh]">
-            {/* Edges */}
             {filteredEdges.map((edge, i) => {
               const from = getNode(edge.from);
               const to = getNode(edge.to);
@@ -174,7 +170,6 @@ export default function Relationships() {
               );
             })}
 
-            {/* Nodes */}
             {nodes.map((node) => {
               const connected = isConnected(node.id);
               return (
@@ -184,9 +179,7 @@ export default function Relationships() {
                   className="cursor-pointer"
                   opacity={connected ? 1 : 0.25}
                 >
-                  {/* Glow */}
                   <circle cx={node.x} cy={node.y} r={selected === node.id ? 35 : 28} fill={node.color} opacity={0.15} />
-                  {/* Node circle */}
                   <circle
                     cx={node.x}
                     cy={node.y}
@@ -195,7 +188,6 @@ export default function Relationships() {
                     stroke={node.color}
                     strokeWidth={selected === node.id ? 3 : 2}
                   />
-                  {/* Initials */}
                   <text
                     x={node.x}
                     y={node.y + 1}
@@ -208,7 +200,6 @@ export default function Relationships() {
                   >
                     {node.name.split(" ").map((w) => w[0]).join("")}
                   </text>
-                  {/* Label */}
                   <text
                     x={node.x}
                     y={node.y + (selected === node.id ? 38 : 32)}
@@ -224,7 +215,6 @@ export default function Relationships() {
             })}
           </svg>
 
-          {/* Legend */}
           <div className="flex gap-6 mt-4 justify-center flex-wrap">
             {[
               { label: "Allies", color: "hsl(220, 80%, 55%)", dash: false },
@@ -240,7 +230,6 @@ export default function Relationships() {
           </div>
         </motion.div>
 
-        {/* Selected character info */}
         <AnimatePresence>
           {selected && (
             <motion.div
@@ -293,6 +282,3 @@ export default function Relationships() {
     </div>
   );
 }
-
-// Need to import AnimatePresence
-import { AnimatePresence } from "framer-motion";

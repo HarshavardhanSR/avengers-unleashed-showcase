@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Character } from "@/data/characters";
+import { playPowerSFX } from "@/lib/audioEngine";
 
 const effectLabels: Record<string, string> = {
   repulsor: "FIRE REPULSOR",
@@ -16,6 +17,7 @@ export default function PowerActivation({ character }: { character: Character })
 
   const activate = () => {
     setActive(true);
+    playPowerSFX(character.powerEffect);
     setTimeout(() => setActive(false), 1500);
   };
 
@@ -52,7 +54,6 @@ export default function PowerActivation({ character }: { character: Character })
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            {/* Flash */}
             <motion.div
               className="absolute inset-0"
               style={{ backgroundColor: character.color }}
@@ -60,8 +61,6 @@ export default function PowerActivation({ character }: { character: Character })
               animate={{ opacity: 0 }}
               transition={{ duration: 1 }}
             />
-
-            {/* Expanding ring */}
             <motion.div
               className="absolute w-40 h-40 rounded-full border-4"
               style={{ borderColor: character.color }}
@@ -69,8 +68,6 @@ export default function PowerActivation({ character }: { character: Character })
               animate={{ scale: 8, opacity: 0 }}
               transition={{ duration: 1.2, ease: "easeOut" }}
             />
-
-            {/* Power text */}
             <motion.span
               className="font-display text-4xl md:text-6xl font-black tracking-widest uppercase"
               style={{ color: character.color }}
