@@ -1,8 +1,9 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowLeft, Shield, Zap, Users, Heart, Skull } from "lucide-react";
+import { ArrowLeft, Shield, Zap, Users, Heart, Skull, ShoppingBag } from "lucide-react";
 import { useRef } from "react";
-import { characters } from "@/data/characters";
+import { toast } from "sonner";
+import { characters, type Product } from "@/data/characters";
 import CharacterModel from "@/components/CharacterModel";
 import PowerActivation from "@/components/PowerActivation";
 import StatBar from "@/components/StatBar";

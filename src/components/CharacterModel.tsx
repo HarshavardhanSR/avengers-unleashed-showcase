@@ -1,61 +1,58 @@
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { useRef } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { Float, MeshDistortMaterial } from "@react-three/drei";
-import * as THREE from "three";
 
-function EnergyOrb({ color }: { color: string }) {
-  const meshRef = useRef<THREE.Mesh>(null);
+export default function CharacterModel({ src, color, alt }: { src: string; color: string; alt: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const rx = useSpring(useTransform(my, [-50, 50], [10, -10]), { stiffness: 120, damping: 12 });
+  const ry = useSpring(useTransform(mx, [-50, 50], [-10, 10]), { stiffness: 120, damping: 12 });
 
-  useFrame((state) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.y = state.clock.elapsedTime * 0.3;
-      meshRef.current.rotation.z = Math.sin(state.clock.elapsedTime * 0.5) * 0.2;
-    }
-  });
+  const onMove = (e: React.MouseEvent) => {
+    if (!ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    mx.set(((e.clientX - rect.left) / rect.width - 0.5) * 100);
+    my.set(((e.clientY - rect.top) / rect.height - 0.5) * 100);
+  };
+
+  const onLeave = () => {
+    mx.set(0);
+    my.set(0);
+  };
 
   return (
-    <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
-      <mesh ref={meshRef}>
-        <icosahedronGeometry args={[1.5, 4]} />
-        <MeshDistortMaterial
-          color={color}
-          emissive={color}
-          emissiveIntensity={0.4}
-          transparent
-          opacity={0.7}
-          distort={0.3}
-          speed={2}
-          roughness={0.2}
-          metalness={0.8}
-        />
-      </mesh>
-      {/* Inner glow */}
-      <mesh>
-        <sphereGeometry args={[1, 32, 32]} />
-        <meshBasicMaterial color={color} transparent opacity={0.15} />
-      </mesh>
-      {/* Outer ring */}
-      <mesh rotation={[Math.PI / 2, 0, 0]}>
-        <torusGeometry args={[2.2, 0.02, 16, 100]} />
-        <meshBasicMaterial color={color} transparent opacity={0.3} />
-      </mesh>
-      <mesh rotation={[Math.PI / 3, Math.PI / 4, 0]}>
-        <torusGeometry args={[2.5, 0.015, 16, 100]} />
-        <meshBasicMaterial color={color} transparent opacity={0.2} />
-      </mesh>
-    </Float>
-  );
-}
-
-export default function CharacterModel({ color }: { color: string }) {
-  return (
-    <div className="w-full h-[300px] md:h-[400px]">
-      <Canvas camera={{ position: [0, 0, 5], fov: 60 }}>
-        <ambientLight intensity={0.3} />
-        <pointLight position={[10, 10, 10]} intensity={0.5} color={color} />
-        <pointLight position={[-10, -10, -10]} intensity={0.3} color="#4488ff" />
-        <EnergyOrb color={color} />
-      </Canvas>
+    <div
+      ref={ref}
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
+      className="relative w-full h-[400px] md:h-[520px] flex items-center justify-center"
+      style={{ perspective: 1000 }}
+    >
+      {/* Glow halo */}
+      <motion.div
+        className="absolute w-3/4 h-3/4 rounded-full blur-3xl"
+        style={{ backgroundColor: color, opacity: 0.25 }}
+        animate={{ scale: [1, 1.15, 1], opacity: [0.2, 0.35, 0.2] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+      />
+      {/* Rotating ring */}
+      <motion.div
+        className="absolute w-full h-full rounded-full border opacity-20"
+        style={{ borderColor: color }}
+        animate={{ rotate: 360 }}
+        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+      />
+      <motion.img
+        src={src}
+        alt={alt}
+        width={768}
+        height={1024}
+        loading="eager"
+        className="relative max-h-full max-w-full object-contain drop-shadow-2xl"
+        style={{ rotateX: rx, rotateY: ry, transformStyle: "preserve-3d" }}
+        animate={{ y: [0, -12, 0] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+      />
     </div>
   );
 }
