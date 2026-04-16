@@ -192,6 +192,53 @@ export default function CharacterDetail() {
           </div>
         </ParallaxSection>
 
+        {/* MERCH SHOP */}
+        <motion.div
+          className="mt-20"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.6 }}
+        >
+          <div className="flex items-center gap-4 mb-8">
+            <div className="flex-1 h-px" style={{ background: `linear-gradient(to right, transparent, ${character.color}40, transparent)` }} />
+            <span className="text-mono text-[10px] tracking-[0.4em] text-muted-foreground flex items-center gap-2">
+              <ShoppingBag className="w-3 h-3" /> OFFICIAL MERCH
+            </span>
+            <div className="flex-1 h-px" style={{ background: `linear-gradient(to right, transparent, ${character.color}40, transparent)` }} />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {character.products.map((p: Product, i) => (
+              <motion.div
+                key={p.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.08 }}
+                whileHover={{ y: -6 }}
+                className="hud-panel p-5 flex flex-col"
+                style={{ boxShadow: `0 0 18px ${character.color}20` }}
+              >
+                <h4 className="font-display font-bold text-base mb-2" style={{ color: character.color }}>
+                  {p.name}
+                </h4>
+                <p className="text-xs text-foreground/60 leading-relaxed mb-4 flex-1">{p.description}</p>
+                <div className="flex items-center justify-between mt-auto pt-3 border-t" style={{ borderColor: `${character.color}30` }}>
+                  <span className="font-mono text-lg font-bold text-foreground">${p.price.toFixed(2)}</span>
+                  <button
+                    onClick={() => toast.success(`Added "${p.name}" to cart`, { description: "Checkout coming online soon, sir." })}
+                    className="px-3 py-1.5 text-[11px] font-display font-bold tracking-widest uppercase border transition-all hover:bg-white/5"
+                    style={{ borderColor: character.color, color: character.color }}
+                  >
+                    Add to Cart
+                  </button>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
         {/* Bottom spacer for scroll effect */}
         <div className="h-20" />
       </div>
