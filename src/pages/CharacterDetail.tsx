@@ -89,7 +89,7 @@ export default function CharacterDetail() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <CharacterModel color={character.color} />
+            <CharacterModel src={character.hero} color={character.color} alt={`${character.name} full body`} />
           </motion.div>
 
           <motion.div
@@ -98,9 +98,12 @@ export default function CharacterDetail() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <p className="text-mono text-xs tracking-widest text-muted-foreground mb-2">
-              {character.realName.toUpperCase()}
-            </p>
+            <div className="flex items-center gap-3 mb-2">
+              <img src={character.logo} alt="" width={48} height={48} className="w-12 h-12 object-contain" />
+              <p className="text-mono text-xs tracking-widest text-muted-foreground">
+                {character.realName.toUpperCase()}
+              </p>
+            </div>
             <h1
               className="text-4xl md:text-6xl font-display font-black tracking-wider mb-3"
               style={{ color: character.color }}
