@@ -9,7 +9,6 @@ import CharacterDetail from "./pages/CharacterDetail";
 import Relationships from "./pages/Relationships";
 import NotFound from "./pages/NotFound";
 import JarvisChat from "./components/JarvisChat";
-import MusicToggle from "./components/MusicToggle";
 
 const queryClient = new QueryClient();
 
@@ -27,7 +26,6 @@ const App = () => (
           <Route path="*" element={<NotFound />} />
         </Routes>
         <JarvisChat />
-        <MusicToggle />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

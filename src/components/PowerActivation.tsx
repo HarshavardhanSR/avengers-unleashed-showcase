@@ -1,14 +1,13 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Character } from "@/data/characters";
-import { playPowerSFX } from "@/lib/audioEngine";
 
 const effectLabels: Record<string, string> = {
-  repulsor: "FIRE REPULSOR",
-  shield: "THROW SHIELD",
-  lightning: "SUMMON LIGHTNING",
-  smash: "HULK SMASH",
-  strike: "WIDOW'S BITE",
+  repulsor: "FIRE HEX-CORE",
+  shield: "THROW OCTOGON",
+  lightning: "SUMMON THUNDER",
+  smash: "GOLIATH SMASH",
+  strike: "PLASMA STRIKE",
   web: "WEB SLING",
 };
 
@@ -17,7 +16,6 @@ export default function PowerActivation({ character }: { character: Character })
 
   const activate = () => {
     setActive(true);
-    playPowerSFX(character.powerEffect);
     setTimeout(() => setActive(false), 1500);
   };
 
