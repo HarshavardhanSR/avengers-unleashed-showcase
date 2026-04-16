@@ -25,10 +25,10 @@ export default function Characters() {
           </button>
           <div>
             <h1 className="text-3xl md:text-4xl font-display font-bold tracking-wider">
-              SELECT <span className="text-primary glow-text-red">HERO</span>
+              SHOP <span className="text-primary glow-text-red">HEROES</span>
             </h1>
             <p className="text-mono text-xs text-muted-foreground tracking-widest mt-1">
-              CHOOSE YOUR AVENGER • {characters.length} AVAILABLE
+              PICK A HERO • {characters.length} ROSTERED • 5 PRODUCTS EACH
             </p>
           </div>
         </motion.div>

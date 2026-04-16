@@ -10,7 +10,7 @@ const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/jarvis-chat`
 export default function JarvisChat() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Msg[]>([
-    { role: "assistant", content: "Good day. I am J.A.R.V.I.S., at your service. How may I assist you with the Avengers database?" },
+    { role: "assistant", content: "Good day, sir. I'm J.A.R.V.I.S., your shopping concierge for the Sentinel Squad. Which hero's merch may I tempt you with today?" },
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
