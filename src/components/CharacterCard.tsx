@@ -9,50 +9,80 @@ export default function CharacterCard({ character, index }: { character: Charact
     <motion.div
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.1, duration: 0.5 }}
-      whileHover={{ scale: 1.05, y: -8 }}
+      transition={{ delay: index * 0.08, duration: 0.5 }}
+      whileHover={{ scale: 1.04, y: -8 }}
       onClick={() => navigate(`/character/${character.id}`)}
       className="relative cursor-pointer group"
     >
-      <div className="hud-panel p-6 h-full transition-all duration-300"
+      <div
+        className="hud-panel p-5 h-full transition-all duration-300 flex flex-col"
         style={{
-          boxShadow: `0 0 20px ${character.color}20, inset 0 0 20px ${character.color}10`,
+          boxShadow: `0 0 20px ${character.color}25, inset 0 0 20px ${character.color}10`,
         }}
       >
-        {/* Scan line effect on hover */}
-        <div className="absolute inset-0 overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-          <div className="absolute inset-x-0 h-px bg-glow-blue/40 animate-hud-scan" />
+        {/* Animated logo */}
+        <div className="relative w-24 h-24 mx-auto mb-4">
+          <motion.div
+            className="absolute inset-0 rounded-full blur-xl opacity-50"
+            style={{ backgroundColor: character.color }}
+            animate={{ scale: [1, 1.15, 1], opacity: [0.4, 0.7, 0.4] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.img
+            src={character.logo}
+            alt={`${character.name} logo`}
+            width={96}
+            height={96}
+            loading="lazy"
+            className="relative w-24 h-24 object-contain drop-shadow-[0_0_10px_currentColor]"
+            style={{ color: character.color }}
+            animate={{ rotate: [0, 3, -3, 0], y: [0, -4, 0] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+            whileHover={{ scale: 1.1, rotate: 0 }}
+          />
         </div>
 
-        {/* Character icon circle */}
-        <div
-          className="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center text-3xl font-display font-bold border-2 transition-all duration-300 group-hover:shadow-lg"
-          style={{
-            borderColor: character.color,
-            color: character.color,
-            boxShadow: `0 0 15px ${character.color}40`,
-          }}
-        >
-          {character.name.charAt(0)}
+        {/* Animated full body image preview */}
+        <div className="relative w-full aspect-[3/4] mb-4 overflow-hidden rounded-sm border" style={{ borderColor: `${character.color}40` }}>
+          <motion.img
+            src={character.hero}
+            alt={`${character.name} full body`}
+            loading="lazy"
+            width={300}
+            height={400}
+            className="w-full h-full object-cover"
+            initial={{ scale: 1.05 }}
+            animate={{ scale: [1.05, 1.1, 1.05] }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+            whileHover={{ scale: 1.18 }}
+          />
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: `linear-gradient(180deg, transparent 50%, ${character.color}30 100%)`,
+            }}
+          />
         </div>
 
         <h3
-          className="text-xl font-display font-bold text-center mb-1 transition-all"
+          className="text-lg font-display font-bold text-center mb-1 transition-all"
           style={{ color: character.color }}
         >
-          {character.name}
+          {character.name.toUpperCase()}
         </h3>
-        <p className="text-muted-foreground text-center text-sm mb-3 font-mono">
+        <p className="text-muted-foreground text-center text-xs mb-2 font-mono">
           {character.realName}
         </p>
-        <p className="text-foreground/60 text-center text-xs italic leading-relaxed">
+        <p className="text-foreground/60 text-center text-xs italic leading-relaxed mb-3">
           "{character.tagline}"
         </p>
 
-        {/* Bottom accent line */}
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 group-hover:w-3/4 h-px transition-all duration-500"
-          style={{ backgroundColor: character.color }}
-        />
+        <div
+          className="mt-auto pt-3 text-center text-mono text-[10px] tracking-widest border-t"
+          style={{ borderColor: `${character.color}30`, color: character.color }}
+        >
+          SHOP MERCH →
+        </div>
       </div>
     </motion.div>
   );
